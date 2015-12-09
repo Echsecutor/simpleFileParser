@@ -40,21 +40,19 @@ bool SimpleFileParser::get(std::string * const r_key, std::string * const r_valu
       std::smatch match;
       if (std::regex_match(line, match, re) && match.length() >= 3) {
 
-	size_t cur=0;
 	//		std::cout << "Matching groups:" << std::endl; 	//< debugging
 	for(std::smatch::iterator it = match.begin(); it != match.end(); ++it){
 	  //	  std::cout << *it << std::endl; 	//< debugging
 
-	  if(cur == key_id){
+	  if(cur == 1){
 	    *r_key = *it;
 	  }
-	  if(cur == value_id){
+	  if(cur == 2){
 	    *r_value = *it;
+	    return true;
 	  }
 	  ++cur;
 	}
-
-        return true;
       }
 
   }//wend

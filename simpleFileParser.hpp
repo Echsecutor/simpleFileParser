@@ -42,25 +42,17 @@ private:
   /// this default uses '=' as the deliminator and '#' as the comment char
   // \\s whitespace [ \t\r\n\f]
   // \\w word [A-Za-z0-9_]
-  std::string reg_exp;
-
-  //if non-capturing groups are used properly those can be kept at 1/2:
-  size_t key_id;
-  size_t value_id;
-  
+  std::string reg_exp;  
 
   SimpleFileParser(){};
 
     SimpleFileParser(bool p_close_my_stream,
 		   std::istream* p_in_stream,
-		   const std::string& p_reg_exp,
-		     size_t p_key_id,
-		     size_t p_value_id)
+		   const std::string& p_reg_exp)
     :close_my_stream(p_close_my_stream),
      in_stream(p_in_stream),
-     reg_exp(p_reg_exp),
-     key_id(p_key_id),
-     value_id(p_value_id){};
+     reg_exp(p_reg_exp)
+     ){};
 
     SimpleFileParser(bool p_close_my_stream,
 		   std::istream* p_in_stream,
@@ -118,12 +110,12 @@ public:
 
 
   /// pass filename and specify regexp and the ids of the matching groups explicitly
-  SimpleFileParser(const char * p_in_file_name, const std::string& p_reg_exp,size_t p_key_id, size_t p_value_id)
-    :SimpleFileParser(true,new std::ifstream(p_in_file_name), p_reg_exp, p_key_id, p_value_id){}
+  SimpleFileParser(const char * p_in_file_name, const std::string& p_reg_exp)
+    :SimpleFileParser(true,new std::ifstream(p_in_file_name), p_reg_exp){}
 
     /// pass filename and specify regexp and the ids of the matching groups explicitly
-  SimpleFileParser(std::istream* p_in_stream, const std::string& p_reg_exp, size_t p_key_id, size_t p_value_id)
-    :SimpleFileParser(false,p_in_stream, p_reg_exp,p_key_id,p_value_id){}
+  SimpleFileParser(std::istream* p_in_stream, const std::string& p_reg_exp)
+    :SimpleFileParser(false,p_in_stream, p_reg_exp){}
 
 
   /// will only close the stream if it was opened by the constructor
