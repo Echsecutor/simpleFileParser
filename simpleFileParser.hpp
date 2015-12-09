@@ -1,7 +1,7 @@
 /**
  * @file simpleFileParser.hpp
  * @author Sebastian Schmittner <sebastian@schmittner.pw>
- * @version 1.0.2015-12-06
+ * @version 1.1.2015-12-09
  *
  * @section DESCRIPTION
  *
@@ -45,8 +45,8 @@ private:
   std::string reg_exp;
 
   //if non-capturing groups are used properly those can be kept at 1/2:
-  size_t key_id=1;
-  size_t value_id=2;
+  size_t key_id;
+  size_t value_id;
   
 
   SimpleFileParser(){};
@@ -64,15 +64,27 @@ private:
 
     SimpleFileParser(bool p_close_my_stream,
 		   std::istream* p_in_stream,
-		   const std::string& p_deliminator,
-		   const std::string& p_comment)
+		   const std::string& p_deliminators,
+		   const std::string& p_comments)
     :SimpleFileParser(p_close_my_stream,
 		      p_in_stream,
-		      std::string("\\s*(\\w+(?: \\w+)*)\\s*")
-		      + p_deliminator
-		      + std::string("\\s*(\\w+(?: \\w+)*)\\s*(")
-		      +  p_comment
-		      + std::string(".*)*"),
+		      //key
+		      std::string("\\s*([^")
+		      + p_comments + p_deliminators
+		      + std::string("\\s]+(?: [^")
+		      + p_comments + p_deliminators
+		      + std::string("\\s]+)*)\\s*[")
+		      //=
+		      + p_deliminators
+		      //value
+		      + std::string("]\\s*([^")
+		      + p_comments + p_deliminators
+		      + std::string("\\s]+(?: [^")
+		      + p_comments + p_deliminators
+		      + std::string("\\s]+)*)\\s*([")
+		      //#inline comment
+		      +  p_comments
+		      + std::string("].*)?"),
 		      1,
 		      2){}; 
 
@@ -81,8 +93,8 @@ private:
 		   std::istream* p_in_stream)
     :SimpleFileParser(p_close_my_stream,
 		      p_in_stream,
-		      "=",
-		      "#"){};
+		      "=:",
+		      "#%(?:////////)"){};
   
 
 public:
